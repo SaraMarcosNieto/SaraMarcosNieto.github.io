@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPSO AD5 — Test Practice</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Fonts: DM Sans for body, Fraunces for headings -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       STATE 1 — DASHBOARD
+  ═══════════════════════════════════════════ -->
+  <div id="dashboard" class="screen active">
+    <div class="dash-container">
+      <header class="dash-header">
+        <h1>EPSO <span class="accent">AD5</span></h1>
+        <p class="subtitle">Preparación de tests</p>
+      </header>
+
+      <!-- High scores -->
+      <div class="scores-strip" id="scoresStrip"></div>
+
+      <!-- Category cards -->
+      <h2 class="section-title">Elige categoría</h2>
+      <div class="category-grid">
+        <button class="cat-card" data-cat="Abstracto">
+          <span class="cat-icon">◇</span>
+          <span class="cat-label">Abstracto</span>
+          <span class="cat-count" id="countAbstracto"></span>
+        </button>
+        <button class="cat-card" data-cat="Verbal">
+          <span class="cat-icon">¶</span>
+          <span class="cat-label">Verbal</span>
+          <span class="cat-count" id="countVerbal"></span>
+        </button>
+        <button class="cat-card" data-cat="Numérico">
+          <span class="cat-icon">Σ</span>
+          <span class="cat-label">Numérico</span>
+          <span class="cat-count" id="countNumérico"></span>
+        </button>
+      </div>
+
+      <!-- Timer selection -->
+      <h2 class="section-title">Tiempo</h2>
+      <div class="timer-options" id="timerOptions">
+        <button class="timer-btn" data-mins="10">10 min</button>
+        <button class="timer-btn" data-mins="20">20 min</button>
+        <button class="timer-btn" data-mins="30">30 min</button>
+        <button class="timer-btn selected" data-mins="60">60 min</button>
+        <button class="timer-btn" data-mins="0">Sin límite</button>
+      </div>
+
+      <button class="start-btn" id="startBtn" disabled>Empezar test</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       STATE 2 — ACTIVE TEST
+  ═══════════════════════════════════════════ -->
+  <div id="test" class="screen">
+    <!-- Sticky header -->
+    <div class="test-header">
+      <span class="test-cat" id="testCatLabel"></span>
+      <span class="test-timer" id="testTimer">--:--</span>
+      <span class="test-progress" id="testProgress"></span>
+    </div>
+
+    <div class="test-body" id="testBody">
+      <!-- Context block (text passage / table) -->
+      <div class="context-block" id="contextBlock"></div>
+      <!-- Question image -->
+      <div class="question-image-wrap" id="questionImageWrap">
+        <img id="questionImage" src="" alt="Diagrama de la pregunta">
+      </div>
+      <!-- Question text -->
+      <p class="question-text" id="questionText"></p>
+      <!-- Options -->
+      <div class="options-list" id="optionsList"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="test-nav">
+      <button class="nav-btn" id="prevBtn">← Anterior</button>
+      <button class="nav-btn primary" id="nextBtn">Siguiente →</button>
+      <button class="submit-btn" id="submitBtn">Entregar test</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       STATE 3 — RESULTS & REVIEW
+  ═══════════════════════════════════════════ -->
+  <div id="results" class="screen">
+    <div class="results-container">
+      <div class="results-hero">
+        <h2>Resultado</h2>
+        <div class="score-ring" id="scoreRing">
+          <span class="score-num" id="scoreNum"></span>
+        </div>
+        <p class="score-label" id="scoreLabel"></p>
+      </div>
+
+      <div class="review-list" id="reviewList"></div>
+
+      <button class="start-btn" id="backBtn">Volver al menú</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
