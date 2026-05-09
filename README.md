@@ -1,119 +1,132 @@
-# Preparación EPSO AD5 – Tests de Razonamiento Verbal y Numérico
+# EPSO AD5 Practice – Verbal and Numerical Reasoning Tests
 
-Sitio web estático para que Sara practique los tests del concurso EPSO AD5. Funciona directamente desde GitHub Pages sin necesidad de servidor.
+Static website for practising EPSO AD5 tests. Runs directly from GitHub Pages — no server needed.
 
-## Funcionalidades
+## Features
 
-- Selección de test entre los disponibles
-- Temporizador configurable (o desactivable)
-- Visualización de preguntas verbales y numéricas con tablas de datos
-- Corrección automática al entregar
-- Puntuación según el sistema EPSO: **+1 correcta, −0,25 incorrecta, 0 sin responder**
-- Revisión de errores con la respuesta correcta y explicación detallada
+- Select from available tests on the home screen
+- Configurable countdown timer (can be disabled)
+- Verbal questions displayed as reading passages; numerical questions displayed with data tables
+- Auto-scoring on submission
+- EPSO scoring: **+1 correct, −0.25 wrong, 0 unanswered**
+- Best score and attempt count tracked per test (stored in the browser)
+- Review wrong answers with the correct answer and a detailed explanation
 
-## Cómo usar
+## How to use
 
-1. Abre `index.html` en el navegador (o visita la URL de GitHub Pages)
-2. Selecciona el test que quieres hacer
-3. Configura el tiempo (o desactívalo)
-4. Responde las preguntas y pulsa **Entregar**
-5. Revisa tus errores con las explicaciones
+1. Open `index.html` in a browser (or visit the GitHub Pages URL)
+2. Select a test
+3. Configure the timer (or disable it)
+4. Answer the questions and click **Submit**
+5. Review your mistakes with explanations
 
-## Estructura de archivos
+## File structure
 
 ```
 /
-├── index.html              # Aplicación de una sola página
-├── style.css               # Estilos
-├── app.js                  # Lógica de la app
+├── index.html              # Single-page app (all screens)
+├── style.css               # Styles
+├── app.js                  # App logic
 ├── data/
-│   ├── RVNE1.js            # Test 1 (Razonamiento Verbal y Numérico 1)
-│   └── RVNE2.js            # (ejemplo de cómo añadir más tests)
+│   ├── RVNE1.js            # Test 1 (Verbal + Numerical Reasoning 1)
+│   └── ...                 # Add more test files here
 ├── README.md
-└── GEMINI_OCR_PROMPT.md    # Prompt para extraer tests de PDFs con Gemini
+└── GEMINI_OCR_PROMPT.md    # Prompts for extracting tests from PDFs with Gemini
 ```
 
-## Cómo añadir un nuevo test
+## How to add a new test
 
-### Opción A: con Gemini (recomendado para PDFs escaneados)
+### Option A: with Gemini (recommended for PDF extraction)
 
-1. Abre `GEMINI_OCR_PROMPT.md`
-2. Pega el prompt en Gemini Pro junto con el PDF del nuevo test
-3. Gemini generará el código JS con los datos del test
-4. Guarda el resultado como `data/RVNE2.js` (o el nombre que corresponda)
-5. Añade una línea en `index.html` justo antes del `<script src="app.js">`:
+1. Open `GEMINI_OCR_PROMPT.md` and choose the prompt for the PDF format
+2. Paste the prompt into Gemini Pro together with the PDF
+3. Gemini will generate the JS file
+4. Save it as `data/RVNE2.js` (or a suitable name)
+5. Add a line in `index.html` just before `<script src="app.js">`:
    ```html
    <script src="data/RVNE2.js"></script>
    ```
 
-### Opción B: manualmente
+### Option B: manually
 
-Crea `data/RVNE2.js` con esta estructura:
+Create `data/RVNE2.js` with this structure. Each file uses `window.TESTS.push()` — call it once per test object (a standard RVNE PDF produces two: one verbal, one numerical).
 
 ```javascript
 window.TESTS = window.TESTS || [];
+
 window.TESTS.push({
-  id: "RVNE2",
-  title: "Test de Razonamiento Verbal y Numérico 2",
+  id: "RVNE2-V",
+  title: "RVNE 2 · Razonamiento Verbal",
+  // defaultTimer: 20,  // optional — omit to use the default 35 minutes
   sections: [
     {
       title: "Razonamiento Verbal",
       instruction: "...",
       questionRange: [1, 25]
-    },
+    }
+  ],
+  tables: {},
+  questions: [
+    {
+      number: 1,
+      type: "verbal",       // "verbal" | "numerical" | "knowledge"
+      text: "Question text...",
+      options: { a: "...", b: "...", c: "...", d: "..." },
+      correct: "c",
+      explanation: "Why C is correct..."  // optional for knowledge type
+    }
+  ]
+});
+
+window.TESTS.push({
+  id: "RVNE2-N",
+  title: "RVNE 2 · Razonamiento Numérico",
+  sections: [
     {
       title: "Razonamiento Numérico",
+      instruction: "...",
       questionRange: [26, 40]
     }
   ],
   tables: {
-    // solo para preguntas numéricas que usen tablas
-    tabla_ejemplo: {
-      title: "Título de la tabla",
+    table_example: {
+      title: "Table title",
       headers: ["Col1", "Col2", "Col3"],
       rows: [
-        ["Fila 1", "valor", "valor"],
-        ["Fila 2", "valor", "valor"]
+        ["Row 1", "value", "value"],
+        ["Row 2", "value", "value"]
       ],
-      notes: "Nota opcional debajo de la tabla"   // puede omitirse
+      notes: "Optional note below the table"   // can be omitted
     }
   },
   questions: [
     {
-      number: 1,
-      type: "verbal",            // "verbal" o "numerical"
-      text: "Texto del enunciado...",
-      options: {
-        a: "Opción A",
-        b: "Opción B",
-        c: "Opción C",
-        d: "Opción D"
-      },
-      correct: "c",              // letra de la respuesta correcta
-      explanation: "Explicación de por qué C es la respuesta correcta..."
-    },
-    {
       number: 26,
       type: "numerical",
-      tableRef: "tabla_ejemplo",  // referencia a la tabla definida arriba
-      text: "¿Pregunta numérica?",
+      tableRef: "table_example",  // must match a key in tables above
+      text: "Numerical question?",
       options: { a: "...", b: "...", c: "...", d: "..." },
       correct: "b",
-      explanation: "Cálculo: ..."
+      explanation: "Calculation: ..."
     }
-    // ...
   ]
 });
 ```
 
-Añade `<script src="data/RVNE2.js"></script>` en `index.html` antes de `<script src="app.js">`.
+## Test formats
 
-## Puntuación EPSO
+| Format | Questions | Timer | Types |
+|--------|-----------|-------|-------|
+| Standard RVNE | 25 verbal + 15 numerical | 35 min | `verbal`, `numerical` |
+| Short RVNE | 10 numerical only | 20 min | `numerical` |
+| Knowledge (100Q) | 100 general knowledge | 20 min | `knowledge` |
 
-La puntuación EPSO AD5 aplica penalización por respuestas incorrectas:
+Set `defaultTimer: 20` on the test object for any test shorter than 35 minutes.
+
+## EPSO scoring formula
 
 ```
-Puntuación = Correctas − (Incorrectas × 0,25)
+Score = Correct − (Wrong × 0.25)
 ```
 
-El sitio muestra tanto el número de respuestas correctas como la puntuación penalizada.
+Unanswered questions carry no penalty. Both the raw correct count and the penalised score are shown on the results screen.
