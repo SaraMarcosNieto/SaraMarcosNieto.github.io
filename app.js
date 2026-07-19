@@ -194,7 +194,7 @@ function buildQuestionCard(q) {
   card.dataset.number = q.number;
 
   let optionsHtml = '';
-  ['a', 'b', 'c', 'd'].forEach(letter => {
+  Object.keys(q.options).forEach(letter => {
     optionsHtml += `
       <li>
         <label class="option-label">
